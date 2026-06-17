@@ -1,0 +1,413 @@
+---
+import type { DirectionCard, DirectionCategory } from '../lib/cms';
+
+interface Props {
+  directions: DirectionCard[];
+}
+
+const { directions } = Astro.props;
+
+const tabs: { id: DirectionCategory; label: string; active?: boolean }[] = [
+  { id: 'adults', label: 'Взрослые', active: true },
+  { id: 'teens', label: 'Подростки 10–17 лет' },
+  { id: 'ensemble', label: 'Ансамбль «ВВЕРХ»' },
+  { id: 'other', label: 'Другие направления и услуги' },
+];
+---
+
+<section class="directions" id="directions">
+  <div class="container">
+    <h2 class="directions__title">Направления по возрасту</h2>
+
+    <!-- Tabs -->
+    <div class="tabs" role="tablist" aria-label="Категории направлений">
+      {tabs.map((tab) => (
+        <button
+          class={`tab ${tab.active ? 'tab--active' : ''}`}
+          role="tab"
+          aria-selected={tab.active ? 'true' : 'false'}
+          aria-controls={`panel-${tab.id}`}
+          data-tab={tab.id}
+          id={`tab-${tab.id}`}
+        >
+          {tab.label}
+        </button>
+      ))}
+      <div class="tab-indicator" id="tabIndicator"></div>
+    </div>
+
+    <!-- Panels -->
+    {tabs.map(tab => (
+      <div
+        class={`tab-panel ${tab.active ? 'tab-panel--active' : ''}`}
+        role="tabpanel"
+        id={`panel-${tab.id}`}
+        aria-labelledby={`tab-${tab.id}`}
+        data-panel={tab.id}
+      >
+        <div class="carousel" data-carousel>
+          {directions.filter((x) => x.category === tab.id).length > 0 ? (
+            <>
+            <button class="carousel__arrow carousel__arrow--prev" aria-label="Предыдущее">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+
+            <div class="carousel__track">
+              {directions
+                .filter((x) => x.category === tab.id)
+                .map((cls, idx) => (
+                <div class={`dance-card ${idx === 0 ? 'dance-card--active' : ''}`} data-card={idx}>
+                  <div class="dance-card__image" style={`background: ${(cls.color ?? '#F5C800')}22;`}>
+                    <div class="dance-card__figure" style={`--accent: ${cls.color ?? '#F5C800'}`}></div>
+                    <div class="dance-card__badge" style={`background: ${cls.color ?? '#F5C800'}`}>
+                      {cls.title.split(' ')[0]}
+                    </div>
+                  </div>
+
+                  <div class="dance-card__content">
+                    <h3 class="dance-card__name">{cls.title}</h3>
+                    <p class="dance-card__subtitle">{cls.subtitle}</p>
+                    <p class="dance-card__desc">{cls.description}</p>
+                    {cls.schedule && (
+                      <a href="#schedule" class="dance-card__schedule">
+                        Расписание
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button class="carousel__arrow carousel__arrow--next" aria-label="Следующее">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"/>
+              </svg>
+            </button>
+            </>
+          ) : (
+            <div class="coming-soon">
+              <div class="coming-soon__icon">🎭</div>
+              <p>Для этой категории пока нет направлений</p>
+            </div>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+.directions {
+  background: var(--teal);
+  padding: 64px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.directions::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+  pointer-events: none;
+}
+
+.directions__title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 32px;
+  letter-spacing: -0.02em;
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  margin-bottom: 40px;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.tab {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: color var(--transition);
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: rgba(255,255,255,0.85);
+}
+
+.tab--active {
+  color: var(--white);
+}
+
+.tab--active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--yellow);
+  border-radius: 2px 2px 0 0;
+}
+
+/* --- Panels --- */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel--active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Carousel --- */
+.carousel {
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  gap: 16px;
+  align-items: center;
+}
+
+.carousel__arrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition), transform var(--transition);
+  cursor: pointer;
+}
+
+.carousel__arrow:hover {
+  background: var(--yellow);
+  color: var(--teal);
+  transform: scale(1.05);
+}
+
+.carousel__arrow:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.carousel__track {
+  overflow: hidden;
+}
+
+.carousel:has(.coming-soon) {
+  grid-template-columns: 1fr;
+}
+
+/* --- Dance Card --- */
+.dance-card {
+  display: none;
+  grid-template-columns: 340px 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.dance-card--active {
+  display: grid;
+  animation: fadeIn 0.35s ease;
+}
+
+.dance-card__image {
+  border-radius: var(--radius-lg);
+  aspect-ratio: 1 / 1.1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 340px;
+}
+
+.dance-card__figure {
+  width: 140px;
+  height: 220px;
+  background: var(--accent, var(--yellow));
+  border-radius: 60% 40% 55% 45% / 35% 45% 55% 65%;
+  opacity: 0.4;
+  animation: sway 4s ease-in-out infinite;
+  position: absolute;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-4deg) scale(1); }
+  50%       { transform: rotate(4deg) scale(1.04); }
+}
+
+.dance-card__badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--teal);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.dance-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dance-card__name {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.02em;
+}
+
+.dance-card__subtitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yellow);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.dance-card__desc {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.75);
+  max-width: 520px;
+}
+
+.dance-card__schedule {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  width: fit-content;
+  margin-top: 8px;
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.dance-card__schedule:hover {
+  color: var(--yellow);
+  border-color: var(--yellow);
+}
+
+/* --- Coming Soon --- */
+.coming-soon {
+  text-align: center;
+  padding: 64px 0;
+  color: rgba(255,255,255,0.5);
+  width: 100%;
+}
+
+.coming-soon__icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 820px) {
+  .carousel {
+    grid-template-columns: 40px 1fr 40px;
+    gap: 10px;
+  }
+
+  .dance-card--active {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .dance-card__image {
+    max-width: 100%;
+    aspect-ratio: 16/9;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab { padding: 10px 12px; font-size: 13px; }
+}
+</style>
+
+<script>
+// Tab switching
+const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab[data-tab]');
+const panels  = document.querySelectorAll<HTMLElement>('.tab-panel[data-panel]');
+
+tabBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+
+    tabBtns.forEach(b => {
+      b.classList.remove('tab--active');
+      b.setAttribute('aria-selected', 'false');
+    });
+    panels.forEach(p => p.classList.remove('tab-panel--active'));
+
+    btn.classList.add('tab--active');
+    btn.setAttribute('aria-selected', 'true');
+    document.querySelector(`[data-panel="${target}"]`)?.classList.add('tab-panel--active');
+  });
+});
+
+// Carousels
+document.querySelectorAll<HTMLElement>('[data-carousel]').forEach(carousel => {
+  const cards = carousel.querySelectorAll<HTMLElement>('[data-card]');
+  const prev  = carousel.querySelector<HTMLButtonElement>('.carousel__arrow--prev');
+  const next  = carousel.querySelector<HTMLButtonElement>('.carousel__arrow--next');
+
+  let current = 0;
+
+  function goTo(idx: number) {
+    cards[current].classList.remove('dance-card--active');
+    current = (idx + cards.length) % cards.length;
+    cards[current].classList.add('dance-card--active');
+    updateArrows();
+  }
+
+  function updateArrows() {
+    if (prev) prev.disabled = current === 0;
+    if (next) next.disabled = current === cards.length - 1;
+  }
+
+  prev?.addEventListener('click', () => goTo(current - 1));
+  next?.addEventListener('click', () => goTo(current + 1));
+  updateArrows();
+});
+</script>

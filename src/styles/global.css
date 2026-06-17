@@ -1,0 +1,85 @@
+/* Studance – Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;900&family=Golos+Text:wght@400;500;600&display=swap');
+
+:root {
+  --yellow: #F5C800;
+  --yellow-dark: #D9AE00;
+  --yellow-hover: #FFD700;
+  --teal: #1A3A4A;
+  --teal-light: #2A5060;
+  --teal-mid: #224455;
+  --white: #FFFFFF;
+  --off-white: #F7F5EF;
+  --gray: #8A8A8A;
+  --gray-light: #E8E6E0;
+  --text: #111111;
+
+  --font-display: 'Unbounded', sans-serif;
+  --font-body: 'Golos Text', sans-serif;
+
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-sm: 0 4px 16px rgba(26,58,74,0.08);
+  --shadow-md: 0 12px 40px rgba(26,58,74,0.12);
+  --shadow-lg: 0 24px 64px rgba(26,58,74,0.16);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--white);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+/* Focus styles */
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

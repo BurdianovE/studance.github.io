@@ -1,0 +1,177 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <div class="footer__logo">
+        <svg width="40" height="40" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="18" cy="18" r="18" fill="#F5C800"/>
+          <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="Unbounded, sans-serif" font-size="11" font-weight="700" fill="#1A3A4A">STU</text>
+        </svg>
+        <div>
+          <div class="footer__logo-name">STUDANCE</div>
+          <div class="footer__logo-sub">Школа танца</div>
+        </div>
+      </div>
+      <p class="footer__tagline">Танцуем с удовольствием каждый день</p>
+    </div>
+
+    <nav class="footer__nav" aria-label="Навигация в подвале">
+      <div class="footer__col">
+        <h4 class="footer__col-title">Направления</h4>
+        <ul>
+          <li><a href="#directions">Взрослые</a></li>
+          <li><a href="#directions">Подростки</a></li>
+          <li><a href="#directions">Ансамбль BVERX</a></li>
+          <li><a href="#directions">Другие направления</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Школа</h4>
+        <ul>
+          <li><a href="#teachers">Педагоги</a></li>
+          <li><a href="#schedule">Расписание</a></li>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#signup">Записаться</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h4 class="footer__col-title">Контакты</h4>
+        <ul>
+          <li><a href="tel:+79001234567">+7 (900) 123-45-67</a></li>
+          <li><a href="mailto:info@studance.ru">info@studance.ru</a></li>
+          <li><a href="https://yandex.ru/maps/org/studans/34399434443?si=66bu812jwtwazdmk9fzwdtcpng">г. Реутов, ул. Лесная, 9</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+  <div class="footer__bottom">
+    <div class="container footer__bottom-inner">
+      <p>&copy; {year} Школа танца Studance. Все права защищены.</p>
+      <a href="/privacy">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer {
+  background: var(--teal);
+  color: rgba(255,255,255,0.75);
+}
+
+.footer__inner {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 64px;
+  padding-top: 64px;
+  padding-bottom: 48px;
+}
+
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.footer__logo-name {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.04em;
+}
+
+.footer__logo-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer__tagline {
+  font-size: 14px;
+  line-height: 1.5;
+  max-width: 240px;
+}
+
+.footer__nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.footer__col-title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.footer__col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__col a,
+.footer__col span {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  transition: color var(--transition);
+}
+
+.footer__col a:hover {
+  color: var(--yellow);
+}
+
+.footer__bottom {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 20px 0;
+}
+
+.footer__bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer__bottom a {
+  color: rgba(255,255,255,0.5);
+  transition: color var(--transition);
+}
+
+.footer__bottom a:hover {
+  color: var(--yellow);
+}
+
+@media (max-width: 820px) {
+  .footer__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding-top: 48px;
+  }
+
+  .footer__nav {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__nav {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

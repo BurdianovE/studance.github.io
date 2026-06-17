@@ -1,0 +1,214 @@
+---
+const navLinks = [
+  { href: '#directions', label: 'Направления' },
+  { href: '#teachers', label: 'Педагоги' },
+  { href: '#schedule', label: 'Расписание' },
+  { href: '#directions', label: 'Ансамбль «Вверх»' },
+  { href: '#about', label: 'О нас' },
+];
+---
+
+<header class="nav-wrapper">
+  <nav class="nav container">
+    <a href="/" class="nav__logo" aria-label="Studance — на главную">
+      <img src="/logo-studance.png" alt="Studance — школа танца" class="nav__logo-img" />
+    </a>
+
+    <button class="nav__burger" id="navBurger" aria-label="Открыть меню" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <ul class="nav__links" id="navLinks" role="list">
+      {navLinks.map(link => (
+        <li>
+          <a href={link.href} class="nav__link">{link.label}</a>
+        </li>
+      ))}
+    </ul>
+
+    <a href="#signup" class="nav__cta-btn">
+      Записаться
+    </a>
+
+    <a href="/account" class="nav__account" aria-label="Личный кабинет" aria-current={Astro.url.pathname === '/account' ? 'page' : undefined}>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+      </svg>
+    </a>
+  </nav>
+</header>
+
+<style>
+.nav-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--white);
+  border-bottom: 1px solid rgba(26,58,74,0.08);
+  box-shadow: 0 2px 20px rgba(26,58,74,0.06);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 72px;
+}
+
+.nav__logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.nav__logo-img {
+  display: block;
+  height: 42px;
+  width: auto;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  list-style: none;
+  margin-left: auto;
+}
+
+.nav__link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--teal);
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background var(--transition), color var(--transition);
+  white-space: nowrap;
+}
+
+.nav__link:hover {
+  background: var(--yellow);
+  color: var(--teal);
+}
+
+.nav__cta-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  padding: 10px 20px;
+  background: var(--yellow);
+  color: var(--teal);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 50px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.01em;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.nav__cta-btn:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245,200,0,0.35);
+}
+
+.nav__account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: var(--white);
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.nav__account:hover {
+  background: var(--teal-light);
+  transform: scale(1.08);
+}
+
+.nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  margin-left: auto;
+  border-radius: 8px;
+  transition: background var(--transition);
+}
+
+.nav__burger:hover {
+  background: var(--off-white);
+}
+
+.nav__burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--teal);
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+@media (max-width: 960px) {
+  .nav__cta-btn { display: none; }
+}
+
+@media (max-width: 820px) {
+  .nav__burger { display: flex; }
+
+  .nav__links {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--white);
+    padding: 12px 20px 20px;
+    border-bottom: 1px solid rgba(26,58,74,0.08);
+    gap: 0;
+    margin-left: 0;
+    box-shadow: 0 12px 32px rgba(26,58,74,0.1);
+  }
+
+  .nav__links.is-open { display: flex; }
+
+  .nav__link {
+    padding: 14px 8px;
+    width: 100%;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(26,58,74,0.05);
+    font-size: 15px;
+  }
+
+  .nav__link:last-child {
+    border-bottom: none;
+  }
+}
+</style>
+
+<script>
+const burger = document.getElementById('navBurger');
+const links = document.getElementById('navLinks');
+
+burger?.addEventListener('click', () => {
+  const isOpen = links?.classList.toggle('is-open');
+  burger.setAttribute('aria-expanded', String(isOpen));
+});
+
+// Close on link click
+links?.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    links.classList.remove('is-open');
+    burger?.setAttribute('aria-expanded', 'false');
+  });
+});
+</script>

@@ -1,0 +1,211 @@
+---
+import festivalImg from '../img/festival.png';
+import groupImg from '../img/group-dance.png';
+import soloImg from '../img/solo.png';
+import kolesoImg from '../img/koleso.png';
+---
+
+<section class="hero">
+  <div class="container hero__inner">
+
+    <!-- Left: Yellow card -->
+    <div class="hero__card">
+      <p class="hero__eyebrow">Школа танца</p>
+      <h1 class="hero__title">Studance</h1>
+      <p class="hero__desc">
+        Обучаем детей от 2‑х до 13‑ти лет и взрослых от 14‑ти различным направлениям хореографического искусства
+      </p>
+      <a href="#signup" class="hero__btn">
+        Записаться на занятие
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Right: Photo grid -->
+    <div class="hero__grid" aria-hidden="true">
+      <div class="hero__photo hero__photo--1">
+        <img src="/img/festival.png" alt="Фестиваль" />
+      </div>
+      
+      <div class="hero__photo hero__photo--2">
+        <img src="/img/group-dance.png" alt="Группа танцоров" />
+      </div>
+      
+      <div class="hero__photo hero__photo--3">
+        <img src="/img/solo.png" alt="Сольный танец" />
+      </div>
+      
+      <div class="hero__photo hero__photo--4">
+        <img src="/img/koleso.png" alt="Колесо искусств" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+.hero {
+  background: var(--off-white);
+  padding: 48px 0 64px;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 32px;
+  align-items: stretch;
+}
+
+/* --- Yellow card --- */
+.hero__card {
+  background: var(--yellow);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px 52px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__card::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  pointer-events: none;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  opacity: 0.75;
+}
+
+.hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--teal);
+  letter-spacing: -0.02em;
+}
+
+.hero__desc {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--teal);
+  max-width: 340px;
+  font-weight: 500;
+}
+
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  background: var(--teal);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px 28px;
+  border-radius: 50px;
+  width: fit-content;
+  letter-spacing: 0.02em;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hero__btn:hover {
+  background: #0d2535;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(26,58,74,0.25);
+}
+
+/* --- Photo grid --- */
+.hero__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 280px 280px;
+  gap: 16px;
+}
+
+.hero__photo {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.hero__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Специфичные скругления для каждого блока */
+.hero__photo--1 {
+  border-radius: 20px;
+}
+
+.hero__photo--2 {
+  border-radius: 20px;
+}
+
+.hero__photo--3 {
+  border-radius: 20px;
+}
+
+.hero__photo--4 {
+  border-radius: 20px;
+}
+
+/* Animate on load */
+.hero__card {
+  animation: slideUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero__grid {
+  animation: slideUp 0.7s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__grid {
+    grid-template-rows: 200px 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero__card {
+    padding: 32px 24px 40px;
+  }
+
+  .hero__grid {
+    grid-template-rows: 150px 150px;
+    gap: 10px;
+  }
+}
+</style>

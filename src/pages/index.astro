@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Directions from '../components/Directions.astro';
+import Teachers from '../components/Teachers.astro';
+import Schedule from '../components/Schedule.astro';
+import Reviews from '../components/Reviews.astro';
+import Signup from '../components/Signup.astro';
+import { getCms } from '../lib/cms';
+
+const cms = await getCms();
+---
+
+<Layout>
+  <Hero />
+  <Directions directions={cms.directions} />
+  <Teachers teachers={cms.teachers} />
+  <Schedule />
+  <Reviews />
+  <Signup />
+</Layout>

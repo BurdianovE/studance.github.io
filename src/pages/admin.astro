@@ -1,0 +1,517 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCms } from '../lib/cms';
+import { getLastSyncInfo } from '../lib/cms-db';
+
+const cms = await getCms();
+const lastSync = getLastSyncInfo();
+---
+
+<Layout title="Админка — Studance" description="Редактирование преподавателей и расписания">
+  <div class="admin">
+    <div class="container admin__inner">
+      <h1 class="admin__title">Админ-панель</h1>
+      <p class="admin__lead">Преподаватели и направления хранятся в SQLite. Расписание загружается из ImpulseCRM.</p>
+
+      <label class="admin__token">
+        <span>Пароль (ADMIN_TOKEN из .env)</span>
+        <input id="admin-token" type="password" autocomplete="current-password" placeholder="Введите пароль для сохранения" />
+      </label>
+
+      <section class="admin__section">
+        <div class="admin__head">
+          <h2>Преподаватели</h2>
+          <button type="button" class="admin__btn admin__btn--ghost" id="add-teacher">+ Добавить</button>
+        </div>
+        <div id="admin-teachers" class="admin__list"></div>
+      </section>
+
+      <section class="admin__section">
+        <div class="admin__head">
+          <h2>Направления</h2>
+          <button type="button" class="admin__btn admin__btn--ghost" id="add-direction">+ Добавить</button>
+        </div>
+        <p class="admin__hint">Категории: adults — взрослые, teens — подростки, ensemble — ансамбль, other — другие направления.</p>
+        <div id="admin-directions" class="admin__list"></div>
+      </section>
+
+      <div class="admin__actions">
+        <button type="button" class="admin__btn admin__btn--primary" id="admin-save">Сохранить</button>
+        <span id="admin-status" class="admin__status" role="status"></span>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+.admin {
+  padding: 48px 0 100px;
+  background: var(--off-white);
+  min-height: 60vh;
+}
+
+.admin__inner {
+  max-width: 880px;
+}
+
+.admin__title {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3vw, 32px);
+  color: var(--teal);
+  margin-bottom: 12px;
+}
+
+.admin__lead {
+  color: var(--gray);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.admin__token {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.admin__token input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(26, 58, 74, 0.2);
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+
+.admin__section {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(26, 58, 74, 0.08);
+}
+
+.admin__section h2 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--teal);
+}
+
+.admin__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin__hint {
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.admin__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-row {
+  border: 1px solid rgba(26, 58, 74, 0.12);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.admin-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.admin-fields input:not([type='checkbox']),
+.admin-fields select {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(26, 58, 74, 0.15);
+  font-family: var(--font-body);
+  font-size: 14px;
+}
+
+.admin-fields input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+}
+
+.admin-row__top {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.admin__btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 999px;
+  transition: background var(--transition), color var(--transition);
+}
+
+.admin__btn--ghost {
+  background: var(--off-white);
+  color: var(--teal);
+}
+
+.admin__btn--ghost:hover {
+  background: rgba(245, 200, 0, 0.35);
+}
+
+.admin__btn--danger {
+  background: transparent;
+  color: #b91c1c;
+  font-size: 13px;
+  padding: 6px 12px;
+}
+
+.admin__btn--danger:hover {
+  background: rgba(185, 28, 28, 0.08);
+}
+
+.admin__btn--primary {
+  background: var(--teal);
+  color: var(--white);
+}
+
+.admin__btn--primary:hover {
+  background: #0d2535;
+}
+
+.admin__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.admin__status {
+  font-size: 14px;
+  color: var(--gray);
+}
+
+.admin__status.is-ok {
+  color: #15803d;
+}
+
+.admin__status.is-err {
+  color: #b91c1c;
+}
+
+.admin__list--readonly .admin-row {
+  background: var(--off-white);
+}
+
+.admin-readonly-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(26, 58, 74, 0.08);
+  font-size: 14px;
+}
+
+.admin-readonly-row:last-child {
+  border-bottom: 0;
+}
+
+.admin-readonly-row__day {
+  font-weight: 700;
+  color: var(--teal);
+}
+
+.admin-readonly-row__meta {
+  color: var(--gray);
+  font-size: 13px;
+  margin-top: 2px;
+}
+</style>
+
+<script define:vars={{ cms }}>
+  function escapeAttr(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;');
+  }
+
+  function uid() {
+    return typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID()
+      : `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  let state = JSON.parse(JSON.stringify(cms));
+
+  const teachersEl = document.getElementById('admin-teachers');
+  const classesEl = document.getElementById('admin-classes');
+  const directionsEl = document.getElementById('admin-directions');
+  const statusEl = document.getElementById('admin-status');
+  const tokenEl = document.getElementById('admin-token');
+
+  function setStatus(text, kind) {
+    if (!statusEl) return;
+    statusEl.textContent = text;
+    statusEl.classList.remove('is-ok', 'is-err');
+    if (kind === 'ok') statusEl.classList.add('is-ok');
+    if (kind === 'err') statusEl.classList.add('is-err');
+  }
+
+  function bindInputs(root, listKey, fields) {
+    root.querySelectorAll('input, select').forEach((el) => {
+      el.addEventListener('change', () => {
+        const i = Number(el.dataset.i);
+        const k = el.dataset.k;
+        if (!k || Number.isNaN(i)) return;
+        const row = state[listKey][i];
+        if (!row) return;
+        if (el instanceof HTMLInputElement && el.type === 'checkbox') row[k] = el.checked;
+        else if (k === 'dayOfWeek') row[k] = Number(el.value);
+        else row[k] = el.value;
+      });
+    });
+  }
+
+  function renderTeachers() {
+    if (!teachersEl) return;
+    teachersEl.innerHTML = '';
+    state.teachers.forEach((t, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'admin-row';
+      wrap.innerHTML = `
+        <div class="admin-row__top">
+          <button type="button" class="admin__btn admin__btn--danger" data-remove-teacher="${idx}">Удалить</button>
+        </div>
+        <div class="admin-fields">
+          <label>Имя <input type="text" data-k="name" data-i="${idx}" value="${escapeAttr(t.name)}" /></label>
+          <label>Направление <input type="text" data-k="role" data-i="${idx}" value="${escapeAttr(t.role)}" /></label>
+          <label>Опыт <input type="text" data-k="experience" data-i="${idx}" value="${escapeAttr(t.experience || '')}" placeholder="8 лет" /></label>
+          <label>URL фото <input type="text" data-k="photoUrl" data-i="${idx}" value="${escapeAttr(t.photoUrl || '')}" placeholder="/images/teacher.jpg" /></label>
+        </div>`;
+      teachersEl.appendChild(wrap);
+    });
+
+    teachersEl.querySelectorAll('[data-remove-teacher]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-remove-teacher'));
+        state.teachers.splice(idx, 1);
+        syncTeacherIdsInClasses();
+        renderAll();
+      });
+    });
+
+    bindInputs(teachersEl, 'teachers', null);
+  }
+
+  function syncTeacherIdsInClasses() {
+    const valid = new Set(state.teachers.map((t) => t.id));
+    state.classes.forEach((c) => {
+      if (!valid.has(c.teacherId)) c.teacherId = state.teachers[0]?.id ?? '';
+    });
+  }
+
+  function teacherOptions(selectedId) {
+    return state.teachers
+      .map(
+        (t) =>
+          `<option value="${escapeAttr(t.id)}" ${t.id === selectedId ? 'selected' : ''}>${escapeAttr(t.name)}</option>`
+      )
+      .join('');
+  }
+
+  const dayLabels = ['', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+
+  function teacherNameById(id) {
+    return state.teachers.find((t) => t.id === id)?.name ?? '';
+  }
+
+  function renderClasses() {
+    if (!classesEl) return;
+    classesEl.innerHTML = '';
+
+    if (!state.classes.length) {
+      classesEl.innerHTML = '<p class="admin__hint">Нет занятий. Нажмите «Синхронизировать», чтобы загрузить расписание из ImpulseCRM.</p>';
+      return;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'admin-row';
+    const rows = [...state.classes]
+      .sort((a, b) => Number(a.dayOfWeek) - Number(b.dayOfWeek) || String(a.startTime).localeCompare(String(b.startTime)))
+      .map((c) => {
+        const teacher = c.teacherName || teacherNameById(c.teacherId);
+        const meta = [teacher, c.hallName].filter(Boolean).join(' · ');
+        return `
+          <div class="admin-readonly-row">
+            <div class="admin-readonly-row__day">${dayLabels[Number(c.dayOfWeek)] || c.dayOfWeek}</div>
+            <div>
+              <div><strong>${escapeAttr(c.startTime)}–${escapeAttr(c.endTime)}</strong> ${escapeAttr(c.title)}</div>
+              ${meta ? `<div class="admin-readonly-row__meta">${escapeAttr(meta)}</div>` : ''}
+            </div>
+          </div>`;
+      })
+      .join('');
+    wrap.innerHTML = rows;
+    classesEl.appendChild(wrap);
+  }
+
+  function renderDirections() {
+    if (!directionsEl) return;
+    directionsEl.innerHTML = '';
+    state.directions.forEach((d, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'admin-row';
+      wrap.innerHTML = `
+        <div class="admin-row__top">
+          <button type="button" class="admin__btn admin__btn--danger" data-remove-direction="${idx}">Удалить</button>
+        </div>
+        <div class="admin-fields">
+          <label>Категория
+            <select data-k="category" data-i="${idx}">
+              ${['adults', 'teens', 'ensemble', 'other']
+                .map((x) => `<option value="${x}" ${d.category === x ? 'selected' : ''}>${x}</option>`)
+                .join('')}
+            </select>
+          </label>
+          <label>Название <input type="text" data-k="title" data-i="${idx}" value="${escapeAttr(d.title)}" /></label>
+          <label>Подзаголовок <input type="text" data-k="subtitle" data-i="${idx}" value="${escapeAttr(d.subtitle || '')}" /></label>
+          <label>Цвет HEX <input type="text" data-k="color" data-i="${idx}" value="${escapeAttr(d.color || '')}" placeholder="#F5C800" /></label>
+          <label>Описание <input type="text" data-k="description" data-i="${idx}" value="${escapeAttr(d.description || '')}" /></label>
+          <label>Кнопка "Расписание"
+            <input type="checkbox" data-k="schedule" data-i="${idx}" ${d.schedule ? 'checked' : ''} />
+          </label>
+        </div>`;
+      directionsEl.appendChild(wrap);
+    });
+
+    directionsEl.querySelectorAll('[data-remove-direction]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = Number(btn.getAttribute('data-remove-direction'));
+        state.directions.splice(idx, 1);
+        renderAll();
+      });
+    });
+
+    bindInputs(directionsEl, 'directions', null);
+  }
+
+  function renderAll() {
+    renderTeachers();
+    renderDirections();
+    renderClasses();
+  }
+
+  document.getElementById('add-teacher')?.addEventListener('click', () => {
+    state.teachers.push({
+      id: uid(),
+      name: '',
+      role: '',
+      experience: '',
+      photoUrl: '',
+    });
+    renderAll();
+  });
+
+  document.getElementById('sync-schedule')?.addEventListener('click', async () => {
+    const token = tokenEl?.value?.trim();
+    if (!token) {
+      setStatus('Введите пароль для синхронизации', 'err');
+      return;
+    }
+
+    setStatus('Синхронизация с ImpulseCRM…', null);
+
+    try {
+      const res = await fetch('/api/sync/schedule', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'X-Admin-Token': token,
+        },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) {
+        setStatus(data.message || data.error || 'Ошибка синхронизации', 'err');
+        return;
+      }
+
+      const cmsRes = await fetch('/api/cms');
+      const fresh = await cmsRes.json();
+      state.classes = Array.isArray(fresh.classes) ? fresh.classes : [];
+      renderClasses();
+      setStatus(data.message || 'Расписание обновлено', 'ok');
+    } catch {
+      setStatus('Сеть недоступна', 'err');
+    }
+  });
+
+  document.getElementById('add-direction')?.addEventListener('click', () => {
+    state.directions.push({
+      id: uid(),
+      category: 'adults',
+      title: '',
+      subtitle: '',
+      description: '',
+      color: '#F5C800',
+      schedule: true,
+    });
+    renderAll();
+  });
+
+  document.getElementById('admin-save')?.addEventListener('click', async () => {
+    const token = tokenEl?.value?.trim();
+    if (!token) {
+      setStatus('Введите пароль', 'err');
+      return;
+    }
+
+    setStatus('Сохранение…', null);
+
+    try {
+      const res = await fetch('/api/cms', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'X-Admin-Token': token,
+        },
+        body: JSON.stringify(state),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setStatus(data.error || 'Ошибка сохранения', 'err');
+        return;
+      }
+      setStatus('Сохранено в SQLite. Обновите главную страницу.', 'ok');
+    } catch {
+      setStatus('Сеть недоступна', 'err');
+    }
+  });
+
+  renderAll();
+</script>

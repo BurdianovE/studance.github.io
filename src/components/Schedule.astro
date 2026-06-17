@@ -1,0 +1,113 @@
+---
+---
+
+<section class="schedule" id="schedule">
+  <div class="container">
+    <h2 class="schedule__title">Расписание</h2>
+    <div class="schedule__card">
+      <div class="schedule__widget-wrap">
+        <iframe
+          id="f124880"
+          src="https://studancemskadgmailcom.impulsecrm.ru/widget/1"
+          style="width:100%; min-height:600px; border:0; transform:translateZ(0)"
+          frameborder="0"
+          scrolling="no"
+          title="Расписание Studance"
+        ></iframe>
+        <div class="schedule__login-cover" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.schedule {
+  padding: 80px 0;
+  background: var(--teal);
+}
+
+.schedule__title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+
+.schedule__card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+}
+
+.schedule__widget-wrap {
+  position: relative;
+}
+
+.schedule__login-cover {
+  position: absolute;
+  top: 0;
+  right: 165px;
+  width: 250px;
+  height: 56px;
+  background: var(--white);
+  z-index: 2;
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  .schedule__login-cover {
+    width: 120px;
+    height: 52px;
+  }
+}
+</style>
+
+<script>
+  const iframe = document.getElementById('f124880');
+  if (iframe instanceof HTMLIFrameElement) {
+    const iws1PostScroll = function () {
+      const offset = Math.max(1, -iframe.getBoundingClientRect().top);
+      iframe.contentWindow?.postMessage({ iws1ScrollY: offset }, '*');
+    };
+
+    const iw1PostUrl = function (url: string) {
+      iframe.contentWindow?.postMessage({ iw1Url: url }, '*');
+    };
+
+    const iw1PostStorage = function (name: string) {
+      try {
+        const value = localStorage.getItem(name);
+        if (value !== null) {
+          iframe.contentWindow?.postMessage({ iw1Storage: { name, value } }, '*');
+        }
+      } catch {
+        // localStorage недоступен
+      }
+    };
+
+    window.addEventListener('message', function (e) {
+      const loaded = e.data?.iw1Loaded;
+      if (loaded) {
+        iw1PostUrl(window.location.href);
+        iw1PostStorage('impulsecrm_active');
+        iw1PostStorage('impulsecrm_verified');
+      }
+
+      const height = e.data?.iws1Height;
+      if (height) {
+        iframe.height = String(height);
+        iws1PostScroll();
+      }
+
+      const storage = e.data?.iw1Storage;
+      if (storage?.name && typeof storage.value === 'string') {
+        try { localStorage.setItem(storage.name, storage.value); } catch { /* noop */ }
+      }
+    });
+
+    window.addEventListener('scroll', iws1PostScroll);
+  }
+</script>

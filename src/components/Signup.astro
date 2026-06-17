@@ -1,0 +1,326 @@
+---
+---
+
+<section class="signup" id="signup">
+  <div class="container">
+    <div class="signup__inner">
+      <div class="signup__text">
+        <h2 class="signup__title">Запишитесь на первое занятие</h2>
+        <p class="signup__desc">
+          Первое пробное занятие бесплатно. Выберите направление, удобное время — и начните танцевать уже сегодня.
+        </p>
+      </div>
+
+      <form class="signup__form" novalidate>
+        <div class="form-group">
+          <label for="signup-name" class="form-label">Ваше имя</label>
+          <input type="text" id="signup-name" name="name" class="form-input" placeholder="Иван Иванов" required />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-phone" class="form-label">Телефон</label>
+          <input
+            type="tel"
+            id="signup-phone"
+            name="phone"
+            class="form-input"
+            placeholder="+7 (___) ___-__-__"
+            inputmode="tel"
+            autocomplete="tel-national"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="signup-direction" class="form-label">Направление</label>
+          <select id="signup-direction" name="direction" class="form-input form-select">
+            <option value="">Выбрать направление</option>
+            <option value="bachata">Бачата парная</option>
+            <option value="salsa">Сальса</option>
+            <option value="stretching">Растяжка</option>
+            <option value="hiphop">Хип-хоп</option>
+            <option value="kids">Детские направления</option>
+          </select>
+        </div>
+
+        <button type="submit" class="form-submit">
+          Записаться бесплатно
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="form-status" role="status" aria-live="polite"></p>
+        <p class="form-note">Нажимая кнопку, вы соглашаетесь с&nbsp;<a href="/privacy">политикой конфиденциальности</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+.signup {
+  background: var(--yellow);
+  padding: 80px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.signup::before,
+.signup::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.signup::before {
+  width: 400px;
+  height: 400px;
+  background: rgba(255,255,255,0.15);
+  top: -200px;
+  right: -100px;
+}
+
+.signup::after {
+  width: 250px;
+  height: 250px;
+  background: rgba(26,58,74,0.06);
+  bottom: -100px;
+  left: 5%;
+}
+
+.signup__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.signup__title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 900;
+  color: var(--teal);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+}
+
+.signup__desc {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--teal);
+  opacity: 0.8;
+  max-width: 380px;
+}
+
+/* Form */
+.signup__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--white);
+  padding: 36px 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 64px rgba(26,58,74,0.15);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  letter-spacing: 0.02em;
+}
+
+.form-input {
+  padding: 12px 16px;
+  border: 1.5px solid rgba(26,58,74,0.15);
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  background: var(--white);
+  appearance: none;
+}
+
+.form-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(26,58,74,0.1);
+}
+
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231A3A4A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--teal);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px;
+  border-radius: 50px;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+}
+
+.form-submit:hover {
+  background: #0d2535;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(26,58,74,0.25);
+}
+
+.form-note {
+  font-size: 12px;
+  color: var(--gray);
+  text-align: center;
+}
+
+.form-status {
+  min-height: 20px;
+  font-size: 13px;
+  color: var(--gray);
+}
+
+.form-status.is-ok {
+  color: #15803d;
+}
+
+.form-status.is-err {
+  color: #b91c1c;
+}
+
+.form-note a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Responsive */
+@media (max-width: 820px) {
+  .signup__inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .signup__form {
+    padding: 28px 24px;
+  }
+}
+</style>
+
+<script>
+const form = document.querySelector('.signup__form') as HTMLFormElement | null;
+const phoneInput = form?.querySelector<HTMLInputElement>('#signup-phone') ?? null;
+const submitBtn = form?.querySelector<HTMLButtonElement>('.form-submit') ?? null;
+const statusEl = form?.querySelector<HTMLElement>('.form-status') ?? null;
+const submitHtml = submitBtn?.innerHTML ?? '';
+
+function setStatus(text: string, kind?: 'ok' | 'err') {
+  if (!statusEl) return;
+  statusEl.textContent = text;
+  statusEl.classList.remove('is-ok', 'is-err');
+  if (kind) statusEl.classList.add(`is-${kind}`);
+}
+
+function formatPhone(rawValue: string): string {
+  let digits = rawValue.replace(/\D/g, '');
+  if (digits.startsWith('8')) digits = `7${digits.slice(1)}`;
+  if (digits.startsWith('9')) digits = `7${digits}`;
+  if (!digits.startsWith('7')) digits = `7${digits}`;
+  digits = digits.slice(0, 11);
+
+  const rest = digits.slice(1);
+  let out = '+7';
+  if (rest.length > 0) out += ` (${rest.slice(0, 3)}`;
+  if (rest.length >= 3) out += ')';
+  if (rest.length > 3) out += ` ${rest.slice(3, 6)}`;
+  if (rest.length > 6) out += `-${rest.slice(6, 8)}`;
+  if (rest.length > 8) out += `-${rest.slice(8, 10)}`;
+  return out;
+}
+
+function normalizedPhone(value: string): string {
+  const digits = value.replace(/\D/g, '');
+  if (digits.length === 11 && digits.startsWith('8')) return `7${digits.slice(1)}`;
+  if (digits.length === 10) return `7${digits}`;
+  return digits;
+}
+
+phoneInput?.addEventListener('focus', () => {
+  if (!phoneInput.value.trim()) phoneInput.value = '+7 (';
+});
+
+phoneInput?.addEventListener('input', () => {
+  phoneInput.value = formatPhone(phoneInput.value);
+});
+
+phoneInput?.addEventListener('paste', (e) => {
+  e.preventDefault();
+  const text = e.clipboardData?.getData('text') ?? '';
+  phoneInput.value = formatPhone(text);
+});
+
+form?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!form || !submitBtn) return;
+
+  const formData = new FormData(form);
+  const name = String(formData.get('name') ?? '').trim();
+  const phone = String(formData.get('phone') ?? '').trim();
+  const direction = String(formData.get('direction') ?? '').trim();
+
+  if (name.length < 2) {
+    setStatus('Введите имя (минимум 2 символа)', 'err');
+    return;
+  }
+
+  if (normalizedPhone(phone).length !== 11) {
+    setStatus('Введите телефон в формате +7 (999) 999-99-99', 'err');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Отправка...';
+  setStatus('Отправляем заявку...');
+
+  try {
+    const res = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ name, phone, direction }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setStatus(data.error || 'Не удалось отправить заявку', 'err');
+      return;
+    }
+
+    form.reset();
+    if (phoneInput) phoneInput.value = '';
+    setStatus('Заявка отправлена! Мы свяжемся с вами в ближайшее время.', 'ok');
+  } catch {
+    setStatus('Проблема с сетью. Попробуйте еще раз.', 'err');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = submitHtml;
+  }
+});
+</script>
