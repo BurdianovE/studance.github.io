@@ -34,7 +34,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/studance # Папка, куда Astro собирает готовый сайт
+          path: ./dist # Папка, куда Astro собирает готовый сайт
 
   deploy:
     environment:

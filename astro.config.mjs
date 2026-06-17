@@ -5,5 +5,5 @@ export default defineConfig({
   output: 'server',
   adapter: node({ mode: 'standalone' }),
   site: 'https://github.io',
-  // site: 'https://studance',
+  base: 'https://studance',
 });
