@@ -1,9 +1,12 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
 
 export default defineConfig({
-  output: 'server',
-  adapter: node({ mode: 'standalone' }),
-  site: 'https://github.io',
-  base: 'https://studance',
+  // Принудительно собираем сайт как статический HTML
+  output: 'static', 
+  
+  // Указываем правильный базовый адрес вашего профиля
+  site: 'https://burdianove.github.io',
+  
+  // Указываем точное имя папки вашего репозитория (обязательно со слэшем в начале)
+  base: '/studance', 
 });

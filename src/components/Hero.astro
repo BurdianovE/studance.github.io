@@ -1,8 +1,8 @@
 ---
-import festivalImg from '../img/festival.png';
-import groupImg from '../img/group-dance.png';
-import soloImg from '../img/solo.png';
-import kolesoImg from '../img/koleso.png';
+import festivalImg from '../assets/festival.png';
+import groupImg from '../assets/group-dance.png';
+import soloImg from '../assets/solo.png';
+import kolesoImg from '../assets/koleso.png';
 ---
 
 <section class="hero">
@@ -26,19 +26,19 @@ import kolesoImg from '../img/koleso.png';
     <!-- Right: Photo grid -->
     <div class="hero__grid" aria-hidden="true">
       <div class="hero__photo hero__photo--1">
-        <img src="/img/festival.png" alt="Фестиваль" />
+        <img src={festivalImg.src} alt="Фестиваль" />
       </div>
       
       <div class="hero__photo hero__photo--2">
-        <img src="/img/group-dance.png" alt="Группа танцоров" />
+        <img src={groupImg.src} alt="Группа танцоров" />
       </div>
       
       <div class="hero__photo hero__photo--3">
-        <img src="/img/solo.png" alt="Сольный танец" />
+        <img src={soloImg.src} alt="Сольный танец" />
       </div>
       
       <div class="hero__photo hero__photo--4">
-        <img src="/img/koleso.png" alt="Колесо искусств" />
+        <img src={kolesoImg.src} alt="Колесо искусств" />
       </div>
     </div>
 
